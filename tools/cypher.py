@@ -1,12 +1,14 @@
 from langchain.chains import GraphCypherQAChain
-# tag::import-prompt-template[]
+
+from llm import llm
+from graph import graph
 from langchain.prompts.prompt import PromptTemplate
-# end::import-prompt-template[]
 
-from solutions.llm import llm
-from solutions.graph import graph
+# cypher_qa = GraphCypherQAChain.from_llm(
+#     llm,          # (1)
+#     graph=graph,  # (2)
+# )
 
-# tag::prompt[]
 CYPHER_GENERATION_TEMPLATE = """
 You are an expert Neo4j Developer translating user questions into Cypher to answer questions about movies and provide recommendations.
 Convert the user's question based on the schema.
@@ -47,18 +49,11 @@ Schema:
 Question:
 {question}
 """
-# end::prompt[]
-
-# tag::template[]
 cypher_prompt = PromptTemplate.from_template(CYPHER_GENERATION_TEMPLATE)
-# end::template[]
 
-
-# tag::cypher-qa[]
 cypher_qa = GraphCypherQAChain.from_llm(
     llm,
     graph=graph,
     verbose=True,
     cypher_prompt=cypher_prompt
 )
-# tag::cypher-qa[]
